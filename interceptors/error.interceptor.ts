@@ -3,15 +3,14 @@ import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor, HttpErrorResponse
 import { noop, Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { LoggingService } from '../services/logging.service';
+import { AuthenticationService } from '../services/authentication.service';
 
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {
 
-  
+  constructor(private loggingService: LoggingService,private authService:AuthenticationService) {}
 
-  constructor(private loggingService: LoggingService) {}
-
-  intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any> {
+  intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     // const newHeaders = new HttpHeaders({
     //   "Content-Type":"application/json"
     //    });
@@ -20,7 +19,10 @@ export class ErrorInterceptor implements HttpInterceptor {
     // return next.handle(clone);
     return next.handle(request).pipe(
       catchError((e:HttpErrorResponse)=>{
-        this.loggingService.log(`${e.error.message}`);
+        if ([401, 403].includes(e.status)) {
+          this.authService.logout();
+        }
+        this.loggingService.log(`${e.error.message || e.statusText}`);
         return throwError(e);
       })
     )

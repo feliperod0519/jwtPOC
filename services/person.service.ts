@@ -3,7 +3,7 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { Person } from '../models/people'
+import { Person } from '../models/Person'
 
 @Injectable({
   providedIn: 'root'
@@ -28,4 +28,6 @@ export class PersonService {
             map(x=>x)
     );
   }
+
+  validate(id:number,password:string)
 }

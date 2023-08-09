@@ -16,11 +16,13 @@ import { ErrorInterceptor } from '../interceptors/error.interceptor';
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    HttpClientModule
   ],
-  providers: [{provide: HTTP_INTERCEPTORS, useClass:HttpPersonInterceptorInterceptor},
+  providers: [//{provide: HTTP_INTERCEPTORS, useClass:HttpPersonInterceptorInterceptor},
               {provide: LoggingService, useClass: ConsoleLoggingService},
-              {provide: HTTP_INTERCEPTORS, useClass:ErrorInterceptor}],
+              {provide: HTTP_INTERCEPTORS, useClass:ErrorInterceptor}
+            ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
